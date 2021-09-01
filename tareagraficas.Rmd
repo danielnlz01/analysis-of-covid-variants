@@ -1,0 +1,592 @@
+---
+title: ""
+author: ""
+date: "21/4/2021"
+output: html_document
+---
+
+```{r}
+library(ape) 
+library("seqinr")
+library(ggplot2)
+library(mgsub)
+
+```
+
+## Data frame de las variantes
+```{r}
+df <- read.csv("virus_tarea.csv" ,header = TRUE)
+df
+```
+
+```{r}
+viruses <- read.GenBank(df[,1], as.character = TRUE)
+```
+
+# 2 Longitud de cada virus
+```{r}
+print("Longitud de USA")
+length(viruses$MW981372)
+print("Longitud de India")
+length(viruses$MW927136)
+print("Longitud de Brasil")
+length(viruses$MW592707)
+print("Longitud de Francia")
+length(viruses$LR881474)
+print("Longitud de Rusia")
+length(viruses$MW741552)
+print("Longitud de Turquia")
+length(viruses$MW308549)
+print("Longitud de Reino Unido")
+length(viruses$OA982882)
+print("Longitud de Italia")
+length(viruses$MW786740)
+print("Longitud de España")
+length(viruses$MW976780)
+print("Longitud de Alemania")
+length(viruses$MW822592)
+```
+
+```{r}
+usa<-as.data.frame(count(viruses$MW981372, wordsize = 1))
+viruses$MW981372
+india<-as.data.frame(count(viruses$MW927136, wordsize = 1))
+brasil<-as.data.frame(count(viruses$MW592707, wordsize = 1))
+francia<-as.data.frame(count(viruses$LR881474, wordsize = 1))
+rusia<-as.data.frame(count(viruses$MW741552, wordsize = 1))
+turquia<-as.data.frame(count(viruses$MW308549, wordsize = 1))
+uk<-as.data.frame(count(viruses$OA982882, wordsize = 1))
+italia<-as.data.frame(count(viruses$MW786740, wordsize = 1))
+españa<-as.data.frame(count(viruses$MW976780, wordsize = 1))
+alemania<-as.data.frame(count(viruses$MW822592, wordsize = 1))
+```
+
+## Gráfica de USA
+```{r}
+usa
+grafica<- ggplot(data = usa, aes(x=Var1, y=Freq, fill=Var1)) +
+          geom_bar(stat = "identity") + 
+          geom_text(aes(label=Freq), vjust = 0) + 
+          #scale_fill_manual("",values=c("a"="black","c"="orange",etc)) +
+          theme_minimal() 
+          
+grafica
+```
+
+## Porcentaje de cada nucleótido
+```{r}
+seqUsa <- read.GenBank(df[1,1],as.character = TRUE )
+seqUsa <- c(seqUsa$MW981372[1:length(viruses$MW981372)])
+percent <- function(dna)
+{
+  A <- sum(dna %in% c('a'))/length(dna)*100
+  T <- sum(dna %in% c('t'))/length(dna)*100
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("A", A, "%\nT", T, "%\nG", G, "%\nC", C, "%")
+}
+
+percent(seqUsa)
+```
+
+## Porcentaje de GC
+```{r}
+percent <- function(dna)
+{
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("'G + C'", G + C, "%")
+}
+
+percent(seqUsa)
+```
+
+## Hebra complementaria
+```{r}
+hebra_complementaria<- function(hebra)
+{
+  complementario <- mgsub(hebra, c("a", "c", "g", "t"), c("t", "g", "c", "a"))
+  # cat("La hebra directa (5' a 3'):", hebra, "\nSe convertirá a la complementaria (3' a 5'):", complementario)
+  complementario
+}
+
+hebra_complementaria(seqUsa)
+```
+## Gráfica de INDIA
+```{r}
+grafica<- ggplot(data = india, aes(x=Var1, y=Freq, fill=Var1)) +
+          geom_bar(stat = "identity") + 
+          geom_text(aes(label=Freq), vjust = 0) + 
+          #scale_fill_manual("",values=c("a"="black","c"="orange",etc)) +
+          theme_minimal() 
+          
+grafica
+```
+
+## Porcentaje de cada nucleótido
+```{r}
+seqIndia <- read.GenBank(df[2,1],as.character = TRUE )
+seqIndia <- c(seqIndia$MW927136[1:length(viruses$MW927136)])
+percent <- function(dna)
+{
+  A <- sum(dna %in% c('a'))/length(dna)*100
+  T <- sum(dna %in% c('t'))/length(dna)*100
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("A", A, "%\nT", T, "%\nG", G, "%\nC", C, "%")
+}
+
+percent(seqIndia)
+```
+
+## Porcentaje de GC
+```{r}
+percent <- function(dna)
+{
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("'G + C'", G + C, "%")
+}
+
+percent(seqIndia)
+```
+
+## Hebra complementaria
+```{r}
+hebra_complementaria<- function(hebra)
+{
+  complementario <- mgsub(hebra, c("a", "c", "g", "t"), c("t", "g", "c", "a"))
+  # cat("La hebra directa (5' a 3'):", hebra, "\nSe convertirá a la complementaria (3' a 5'):", complementario)
+  complementario
+}
+
+hebra_complementaria(seqIndia)
+```
+
+## Gráfica de BRASIL
+```{r}
+grafica<- ggplot(data = brasil, aes(x=Var1, y=Freq, fill=Var1)) +
+          geom_bar(stat = "identity") + 
+          geom_text(aes(label=Freq), vjust = 0) + 
+          #scale_fill_manual("",values=c("a"="black","c"="orange",etc)) +
+          theme_minimal() 
+          
+grafica
+```
+
+## Porcentaje de cada nucleótido
+```{r}
+seqBrasil <- read.GenBank(df[3,1],as.character = TRUE )
+seqBrasil <- c(seqBrasil$MW592707[1:length(viruses$MW592707)])
+percent <- function(dna)
+{
+  A <- sum(dna %in% c('a'))/length(dna)*100
+  T <- sum(dna %in% c('t'))/length(dna)*100
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("A", A, "%\nT", T, "%\nG", G, "%\nC", C, "%")
+}
+
+percent(seqBrasil)
+```
+
+## Porcentaje de GC
+```{r}
+percent <- function(dna)
+{
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("'G + C'", G + C, "%")
+}
+
+percent(seqBrasil)
+```
+
+## Hebra complementaria
+```{r}
+hebra_complementaria<- function(hebra)
+{
+  complementario <- mgsub(hebra, c("a", "c", "g", "t"), c("t", "g", "c", "a"))
+  # cat("La hebra directa (5' a 3'):", hebra, "\nSe convertirá a la complementaria (3' a 5'):", complementario)
+  complementario
+}
+
+hebra_complementaria(seqBrasil)
+```
+
+## Gráfica de FRANCIA
+```{r}
+grafica<- ggplot(data = francia, aes(x=Var1, y=Freq, fill=Var1)) +
+          geom_bar(stat = "identity") + 
+          geom_text(aes(label=Freq), vjust = 0) + 
+          #scale_fill_manual("",values=c("a"="black","c"="orange",etc)) +
+          theme_minimal() 
+          
+grafica
+```
+
+## Porcentaje de cada nucleótido
+```{r}
+seqFrancia <- read.GenBank(df[4,1],as.character = TRUE )
+seqFrancia <- c(seqFrancia$LR881474[1:length(viruses$LR881474)])
+percent <- function(dna)
+{
+  A <- sum(dna %in% c('a'))/length(dna)*100
+  T <- sum(dna %in% c('t'))/length(dna)*100
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("A", A, "%\nT", T, "%\nG", G, "%\nC", C, "%")
+}
+
+percent(seqFrancia)
+```
+
+## Porcentaje de GC
+```{r}
+percent <- function(dna)
+{
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("'G + C'", G + C, "%")
+}
+
+percent(seqFrancia)
+```
+
+## Hebra complementaria
+```{r}
+hebra_complementaria<- function(hebra)
+{
+  complementario <- mgsub(hebra, c("a", "c", "g", "t"), c("t", "g", "c", "a"))
+  # cat("La hebra directa (5' a 3'):", hebra, "\nSe convertirá a la complementaria (3' a 5'):", complementario)
+  complementario
+}
+
+hebra_complementaria(seqFrancia)
+```
+
+## Gráfica de RUSIA
+```{r}
+grafica<- ggplot(data = rusia, aes(x=Var1, y=Freq, fill=Var1)) +
+          geom_bar(stat = "identity") + 
+          geom_text(aes(label=Freq), vjust = 0) + 
+          #scale_fill_manual("",values=c("a"="black","c"="orange",etc)) +
+          theme_minimal() 
+          
+grafica
+```
+
+## Porcentaje de cada nucleótido
+```{r}
+seqRusia <- read.GenBank(df[5,1],as.character = TRUE )
+seqRusia <- c(seqRusia$MW741552[1:length(viruses$MW741552)])
+percent <- function(dna)
+{
+  A <- sum(dna %in% c('a'))/length(dna)*100
+  T <- sum(dna %in% c('t'))/length(dna)*100
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("A", A, "%\nT", T, "%\nG", G, "%\nC", C, "%")
+}
+
+percent(seqRusia)
+```
+
+## Porcentaje de GC
+```{r}
+percent <- function(dna)
+{
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("'G + C'", G + C, "%")
+}
+
+percent(seqRusia)
+```
+
+## Hebra complementaria
+```{r}
+hebra_complementaria<- function(hebra)
+{
+  complementario <- mgsub(hebra, c("a", "c", "g", "t"), c("t", "g", "c", "a"))
+  # cat("La hebra directa (5' a 3'):", hebra, "\nSe convertirá a la complementaria (3' a 5'):", complementario)
+  complementario
+}
+
+hebra_complementaria(seqRusia)
+```
+
+## Gráfica de TURQUÍA
+```{r}
+grafica<- ggplot(data = turquia, aes(x=Var1, y=Freq, fill=Var1)) +
+          geom_bar(stat = "identity") + 
+          geom_text(aes(label=Freq), vjust = 0) + 
+          #scale_fill_manual("",values=c("a"="black","c"="orange",etc)) +
+          theme_minimal() 
+          
+grafica
+```
+
+## Porcentaje de cada nucleótido
+```{r}
+seqTurquia <- read.GenBank(df[6,1],as.character = TRUE )
+seqTurquia <- c(seqTurquia$MW308549[1:length(viruses$MW308549)])
+percent <- function(dna)
+{
+  A <- sum(dna %in% c('a'))/length(dna)*100
+  T <- sum(dna %in% c('t'))/length(dna)*100
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("A", A, "%\nT", T, "%\nG", G, "%\nC", C, "%")
+}
+
+percent(seqTurquia)
+```
+
+## Porcentaje de GC
+```{r}
+percent <- function(dna)
+{
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("'G + C'", G + C, "%")
+}
+
+percent(seqTurquia)
+```
+
+## Hebra complementaria
+```{r}
+hebra_complementaria<- function(hebra)
+{
+  complementario <- mgsub(hebra, c("a", "c", "g", "t"), c("t", "g", "c", "a"))
+  # cat("La hebra directa (5' a 3'):", hebra, "\nSe convertirá a la complementaria (3' a 5'):", complementario)
+  complementario
+}
+
+hebra_complementaria(seqTurquia)
+```
+
+## Gráfica de INGLATERRA
+```{r}
+grafica<- ggplot(data = uk, aes(x=Var1, y=Freq, fill=Var1)) +
+          geom_bar(stat = "identity") + 
+          geom_text(aes(label=Freq), vjust = 0) + 
+          #scale_fill_manual("",values=c("a"="black","c"="orange",etc)) +
+          theme_minimal() 
+          
+grafica
+```
+
+## Porcentaje de cada nucleótido
+```{r}
+seqInglaterra <- read.GenBank(df[7,1],as.character = TRUE )
+seqInglaterra <- c(seqInglaterra$OA982882[1:length(viruses$OA982882)])
+percent <- function(dna)
+{
+  A <- sum(dna %in% c('a'))/length(dna)*100
+  T <- sum(dna %in% c('t'))/length(dna)*100
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("A", A, "%\nT", T, "%\nG", G, "%\nC", C, "%")
+}
+
+percent(seqInglaterra)
+```
+
+## Porcentaje de GC
+```{r}
+percent <- function(dna)
+{
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("'G + C'", G + C, "%")
+}
+
+percent(seqInglaterra)
+```
+
+## Hebra complementaria
+```{r}
+hebra_complementaria<- function(hebra)
+{
+  complementario <- mgsub(hebra, c("a", "c", "g", "t"), c("t", "g", "c", "a"))
+  # cat("La hebra directa (5' a 3'):", hebra, "\nSe convertirá a la complementaria (3' a 5'):", complementario)
+  complementario
+}
+
+hebra_complementaria(seqInglaterra)
+```
+
+## Gráfica de ITALIA
+```{r}
+grafica<- ggplot(data = italia, aes(x=Var1, y=Freq, fill=Var1)) +
+          geom_bar(stat = "identity") + 
+          geom_text(aes(label=Freq), vjust = 0) + 
+          #scale_fill_manual("",values=c("a"="black","c"="orange",etc)) +
+          theme_minimal() 
+          
+grafica
+```
+
+## Porcentaje de cada nucleótido
+```{r}
+seqItalia <- read.GenBank(df[8,1],as.character = TRUE )
+seqItalia <- c(seqItalia$MW786740[1:length(viruses$MW786740)])
+percent <- function(dna)
+{
+  A <- sum(dna %in% c('a'))/length(dna)*100
+  T <- sum(dna %in% c('t'))/length(dna)*100
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("A", A, "%\nT", T, "%\nG", G, "%\nC", C, "%")
+}
+
+percent(seqItalia)
+```
+
+## Porcentaje de GC
+```{r}
+percent <- function(dna)
+{
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("'G + C'", G + C, "%")
+}
+
+percent(seqItalia)
+```
+
+## Hebra complementaria
+```{r}
+hebra_complementaria<- function(hebra)
+{
+  complementario <- mgsub(hebra, c("a", "c", "g", "t"), c("t", "g", "c", "a"))
+  # cat("La hebra directa (5' a 3'):", hebra, "\nSe convertirá a la complementaria (3' a 5'):", complementario)
+  complementario
+}
+
+hebra_complementaria(seqItalia)
+```
+
+## Gráfica de ESPAÑA
+```{r}
+grafica<- ggplot(data = españa, aes(x=Var1, y=Freq, fill=Var1)) +
+          geom_bar(stat = "identity") + 
+          geom_text(aes(label=Freq), vjust = 0) + 
+          #scale_fill_manual("",values=c("a"="black","c"="orange",etc)) +
+          theme_minimal() 
+          
+grafica
+```
+
+## Porcentaje de cada nucleótido
+```{r}
+seqEspaña <- read.GenBank(df[9,1],as.character = TRUE )
+seqEspaña <- c(seqEspaña$MW976780[1:length(viruses$MW976780)])
+percent <- function(dna)
+{
+  A <- sum(dna %in% c('a'))/length(dna)*100
+  T <- sum(dna %in% c('t'))/length(dna)*100
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("A", A, "%\nT", T, "%\nG", G, "%\nC", C, "%")
+}
+
+percent(seqEspaña)
+```
+
+## Porcentaje de GC
+```{r}
+percent <- function(dna)
+{
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("'G + C'", G + C, "%")
+}
+
+percent(seqEspaña)
+```
+
+## Hebra complementaria
+```{r}
+hebra_complementaria<- function(hebra)
+{
+  complementario <- mgsub(hebra, c("a", "c", "g", "t"), c("t", "g", "c", "a"))
+  # cat("La hebra directa (5' a 3'):", hebra, "\nSe convertirá a la complementaria (3' a 5'):", complementario)
+  complementario
+}
+
+hebra_complementaria(seqEspaña)
+```
+
+## Gráfica de ALEMANIA
+```{r}
+grafica<- ggplot(data = alemania, aes(x=Var1, y=Freq, fill=Var1)) +
+          geom_bar(stat = "identity") + 
+          geom_text(aes(label=Freq), vjust = 0) + 
+          #scale_fill_manual("",values=c("a"="black","c"="orange",etc)) +
+          theme_minimal() 
+          
+grafica
+```
+
+## Porcentaje de cada nucleótido
+```{r}
+seqAlemania <- read.GenBank(df[10,1],as.character = TRUE )
+seqAlemania <- c(seqAlemania$MW822592[1:length(viruses$MW822592)])
+percent <- function(dna)
+{
+  A <- sum(dna %in% c('a'))/length(dna)*100
+  T <- sum(dna %in% c('t'))/length(dna)*100
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("A", A, "%\nT", T, "%\nG", G, "%\nC", C, "%")
+}
+
+percent(seqAlemania)
+```
+
+## Porcentaje de GC
+```{r}
+percent <- function(dna)
+{
+  G <- sum(dna %in% c('g'))/length(dna)*100
+  C <- sum(dna %in% c('c'))/length(dna)*100
+  
+  cat("'G + C'", G + C, "%")
+}
+
+percent(seqAlemania)
+```
+
+## Hebra complementaria
+```{r}
+hebra_complementaria<- function(hebra)
+{
+  complementario <- mgsub(hebra, c("a", "c", "g", "t"), c("t", "g", "c", "a"))
+  # cat("La hebra directa (5' a 3'):", hebra, "\nSe convertirá a la complementaria (3' a 5'):", complementario)
+  complementario
+}
+
+hebra_complementaria(seqAlemania)
+```
